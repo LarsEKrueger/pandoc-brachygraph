@@ -16,7 +16,7 @@ will become
 
 >  «It's a dog,» she said.
 
-if the digraphs (`<<` and `<<` in the example) have been defined for automatic
+if the digraphs (`<<` and `>>` in the example) have been defined for automatic
 replacement.
 
 Since the replacement text can be in any form that pandoc can parse, you can
@@ -46,7 +46,9 @@ All replacements must be placed in a variable `brachygraph`, which contains a
 list of pairs. Each pair consists of the string to be replaced, followed by the
 replacement.
 
-Invalid pairs are ignored. A warning is written to standard output.
+Invalid pairs are ignored. A warning is written to standard error, not
+interfering with the normal filter operation. Thus, even in presence of parsing
+errors, some kind of output should be generated.
 
 Characters in patterns that have a special purpose in markdown, e.g. `>`, must
 be suitably escaped. In case of `>` and `<`, the HTML entities `&gt;` and
@@ -86,7 +88,7 @@ brachygraph:
   * `stack install`
 
 The installation might take some time due to the size and number of
-dependencies required for the pandoc parser.
+dependencies.
 
 ## Running the example(s)
 
