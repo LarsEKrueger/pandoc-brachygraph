@@ -12,6 +12,11 @@ category:            Text
 build-type:          Simple
 extra-source-files:  CHANGELOG.md
 
+source-repository this
+  type:     git
+  location: https://github.com/LarsEKrueger/pandoc-brachygraph.git
+  tag: v_0.1.0.0
+
 executable pandoc-brachygraph
   main-is:             Main.hs
   other-modules:       Brachy
