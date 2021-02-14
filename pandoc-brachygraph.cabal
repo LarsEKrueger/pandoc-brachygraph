@@ -1,0 +1,38 @@
+cabal-version:       >=1.10
+name:                pandoc-brachygraph
+version:             0.1.0.0
+synopsis:            Pandoc filter for text replacements
+description:         Replace text based on a user-supplied list
+license:             MIT
+license-file:        LICENSE
+author:              Lars Krueger
+maintainer:          lars_e_krueger@gmx.de
+copyright:           (c) 2021 Lars Krueger
+category:            Text
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+
+executable pandoc-brachygraph
+  main-is:             Main.hs
+  other-modules:       Brachy
+  build-depends:       base >=4.14 && <4.15,
+                       extra == 1.7.*,
+                       aeson == 1.5.*,
+                       bytestring == 0.10.*,
+                       text == 1.2.*,
+                       pandoc-types == 1.22.*
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+
+
+Test-Suite test-brachygraph
+  type:                exitcode-stdio-1.0
+  main-is:             BrachyTest.hs
+  other-modules:       Brachy
+  hs-source-dirs:      tests, src
+  build-depends:       base >= 4 && < 5,
+                       Cabal == 3.*,
+                       HUnit == 1.6.*,
+                       text == 1.2.*,
+                       pandoc-types == 1.22.*
+  default-language:    Haskell2010
