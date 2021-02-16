@@ -1,3 +1,5 @@
 cabal.project.local
 dist-newstyle
 example/*.sh
+.stack-work
+stack.yaml*
