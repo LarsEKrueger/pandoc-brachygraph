@@ -46,7 +46,7 @@ testFilterMap fun input expected = do
   result <- filterMapM fun input
   result @?= expected
 
-testFar :: ReplacementsTable -> Text -> Maybe [Inline] -> Assertion
+testFar :: ReplacementsTable -> Text -> [Inline] -> Assertion
 testFar reps text expected = do
   let result = findAndReplace reps text
   result @?= expected
@@ -55,9 +55,10 @@ testReps :: ReplacementsTable
 testReps =
   [ ( ">>>", [ Emph [ Str "fsqr" ] ] )
   , ( ">>",  [ Str "fqr" ] )
+  , ( "<<",  [ Str "left" ] )
   ]
 
-testReplace :: Int -> Text -> [Inline] -> [Int] -> [Inline] -> Assertion
+testReplace :: Int -> Text -> [Inline] -> [Int] -> [Either Text [Inline]] -> Assertion
 testReplace len needle replaceWith idxs expected = do
   let result = replaceAll 0 len needle replaceWith idxs
   result @?= expected
@@ -67,16 +68,17 @@ tests = TestList
   [ "filterMapM, empty input"   ~: TestCase $ testFilterMap incrementOdd [] []
   , "filterMapM, empty result"  ~: TestCase $ testFilterMap alwaysNothing [1,2,3] []
   , "filterMapM, normal list"  ~: TestCase $ testFilterMap incrementOdd [1,2,3,4,5,6,100,101] [2,4,6,102]
-  , "replaceAll, one found, at start" ~: TestCase $ testReplace 2 "abcdef" [ Str "xy" ] [0] [ Str "xy", Str "cdef"]
-  , "replaceAll, one found, middle" ~: TestCase $ testReplace 2 "abcdef" [ Str "xy" ] [3] [ Str "abc", Str "xy", Str "f"]
-  , "replaceAll, one found, end" ~: TestCase $ testReplace 2 "abcdef" [ Str "xy" ] [4] [ Str "abcd", Str "xy"]
-  , "replaceAll, one found, full string" ~: TestCase $ testReplace 2 "ab" [ Str "xy" ] [0] [ Str "xy"]
-  , "replaceAll, multiple found" ~: TestCase $ testReplace 2 "ab..def..gh..kl" [ Str "xy" ] [2,7,11] [ Str "ab", Str "xy", Str "def", Str "xy", Str "gh", Str "xy", Str "kl"]
-  , "findAndReplace, empty table" ~: TestCase $ testFar [] "test string" Nothing
-  , "findAndReplace, general case" ~: TestCase $ testFar testReps "abc>>def" $ Just [Str "abc", Str "fqr", Str "def"]
-  , "findAndReplace, find first in middle" ~: TestCase $ testFar testReps "abc>>>def" $ Just [Str "abc", Emph [ Str "fsqr" ], Str "def"]
-  , "findAndReplace, find in first place" ~: TestCase $ testFar testReps ">>>def" $ Just [Emph [ Str "fsqr" ], Str "def"]
-  , "findAndReplace, find in last place" ~: TestCase $ testFar testReps "abc>>>" $ Just [Str "abc", Emph [ Str "fsqr" ] ]
+  , "replaceAll, one found, at start" ~: TestCase $ testReplace 2 "abcdef" [ Str "xy" ] [0] [ Right [Str "xy"], Left "cdef"]
+  , "replaceAll, one found, middle" ~: TestCase $ testReplace 2 "abcdef" [ Str "xy" ] [3] [ Left "abc", Right [Str "xy"], Left "f"]
+  , "replaceAll, one found, end" ~: TestCase $ testReplace 2 "abcdef" [ Str "xy" ] [4] [ Left "abcd", Right [Str "xy"]]
+  , "replaceAll, one found, full string" ~: TestCase $ testReplace 2 "ab" [ Str "xy" ] [0] [ Right [Str "xy"]]
+  , "replaceAll, multiple found" ~: TestCase $ testReplace 2 "ab..def..gh..kl" [ Str "xy" ] [2,7,11] [ Left "ab", Right [Str "xy"], Left "def", Right [Str "xy"], Left "gh", Right [Str "xy"], Left "kl"]
+  , "findAndReplace, empty table" ~: TestCase $ testFar [] "test string" [Str "test string"]
+  , "findAndReplace, general case" ~: TestCase $ testFar testReps "abc>>def" $ [Str "abc", Str "fqr", Str "def"]
+  , "findAndReplace, find first in middle" ~: TestCase $ testFar testReps "abc>>>def" $ [Str "abc", Emph [ Str "fsqr" ], Str "def"]
+  , "findAndReplace, find in first place" ~: TestCase $ testFar testReps ">>>def" $ [Emph [ Str "fsqr" ], Str "def"]
+  , "findAndReplace, find in last place" ~: TestCase $ testFar testReps "abc>>>" $ [Str "abc", Emph [ Str "fsqr" ] ]
+  , "findAndReplace, multiple pattern" ~: TestCase $ testFar testReps "abc>>>def<<" $ [Str "abc", Emph [ Str "fsqr" ], Str "def", Str "left" ]
   ]
 
 main :: IO ()

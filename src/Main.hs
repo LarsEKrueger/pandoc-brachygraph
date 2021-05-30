@@ -64,10 +64,7 @@ replacementTable meta = do
 
 -- This might split a single Inline into multiple Inlines.
 farSingleInline :: ReplacementsTable -> Inline -> IO [Inline]
-farSingleInline reps (Str s)
-  = case findAndReplace reps s of
-         Just rep -> return rep
-         _ -> return [Str s]
+farSingleInline reps (Str s) = return $ findAndReplace reps s
 farSingleInline _ x = return [x]
 
 -- Find and replace in lists of inlines.
