@@ -1,6 +1,6 @@
 cabal-version:       >=1.10
 name:                pandoc-brachygraph
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            Pandoc filter for text replacements
 description:         Replace text based on a user-supplied list
 license:             MIT
@@ -15,7 +15,7 @@ extra-source-files:  CHANGELOG.md
 source-repository this
   type:     git
   location: https://github.com/LarsEKrueger/pandoc-brachygraph.git
-  tag: v_0.1.0.0
+  tag: v_0.1.0.1
 
 executable pandoc-brachygraph
   main-is:             Main.hs
