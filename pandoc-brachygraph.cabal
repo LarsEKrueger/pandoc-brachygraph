@@ -1,6 +1,6 @@
 cabal-version:       >=1.10
 name:                pandoc-brachygraph
-version:             0.1.0.1
+version:             0.1.1.0
 synopsis:            Pandoc filter for text replacements
 description:         Replace text based on a user-supplied list
 license:             MIT
@@ -15,17 +15,17 @@ extra-source-files:  CHANGELOG.md
 source-repository this
   type:     git
   location: https://github.com/LarsEKrueger/pandoc-brachygraph.git
-  tag: v_0.1.0.1
+  tag: v_0.1.1.0
 
 executable pandoc-brachygraph
   main-is:             Main.hs
   other-modules:       Brachy
-  build-depends:       base >=4.14 && <4.15,
-                       extra == 1.7.*,
-                       aeson == 1.5.*,
-                       bytestring == 0.10.*,
-                       text == 1.2.*,
-                       pandoc-types == 1.22.*
+  build-depends:       base >=4 && <5,
+                       extra >= 1.7,
+                       aeson >= 1.5,
+                       bytestring >= 0.10,
+                       text >= 1.2,
+                       pandoc-types == 1.23.*
   hs-source-dirs:      src
   default-language:    Haskell2010
 
@@ -38,6 +38,6 @@ Test-Suite test-brachygraph
   build-depends:       base >= 4 && < 5,
                        Cabal == 3.*,
                        HUnit == 1.6.*,
-                       text == 1.2.*,
-                       pandoc-types == 1.22.*
+                       text >= 1.2,
+                       pandoc-types == 1.23.*
   default-language:    Haskell2010
